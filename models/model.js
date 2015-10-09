@@ -5,9 +5,9 @@ var Schema = mongoose.Schema;
 
 var personSchema = new Schema({
 	name: String,
-	locationGeo : { type: [Number], index: { type: '2dsphere', sparse: true } },
-	locationName : String,	
+	locationName : String,
 	dateAdded : { type: Date, default: Date.now },
+	phoneNumber: String
 })
 
 // export 'Person' model so we can interact with it in other files

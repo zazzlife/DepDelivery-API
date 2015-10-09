@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(methodOverride());
 
 // connecting to database
-app.db = mongoose.connect(process.env.MONGOLAB_URI);
+app.db = mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/beerNow');
 console.log("connected to database");
 
 /**
@@ -43,7 +43,7 @@ app.all('*', function(req, res, next){
 
 // api baseURI is at /api/
 
-// API Routes 
+// API Routes
 
 // CREATE - http://appname.com/api/create (POST)
 // RETRIEVE 1 - http://appname.com/api/get/:id (GET)
