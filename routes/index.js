@@ -5,9 +5,10 @@
  */
 
 // dependencies
-var dotenv = require('dotenv').load();
 // var geocoder = require('geocoder');
+var dotenv = require('dotenv').load();
 var twilio = require('twilio');
+var trim = require('lodash/string/trim');
 
 // our db model
 var Person = require("../models/model.js");
