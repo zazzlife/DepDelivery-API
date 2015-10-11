@@ -21,10 +21,12 @@ config.authToken = process.env.TWILIO_AUTH_TOKEN;
 var client = twilio(config.accountSid, config.authToken);
 
 
-config.twilioNumber = '+15005550006';
+config.twilioNumber = '+14385002583';
 
 // The sales rep / agent's phone number
-config.agentNumber = '+15146770146';
+config.agentNumber = '+15145856858';
+
+config.agents = ['+15145856858', '+14016607575', '+15145728633']
 
 /**
  * GET '/'
@@ -55,51 +57,58 @@ exports.index = function(req, res) {
  */
 
 exports.create = function(req, res) {
-
   console.log(req.body);
   // Assemble a text message body
-  var message = 'New lead received. Call lead at ' + req.body.phone;
+  var message = 'New order received. Call lead at ' + req.body.phone + 'Address: ' + req.body.aptNumber + ' ' + req.body.streetAddress + ' ' + req.body.postalCode;
 
-  // Send lead notification to agent
-  client.sendMessage({
-    to: config.agentNumber,
-    from: config.twilioNumber,
-    body: message
-  }, function(err, data) {
-    // Return a 500 if there was an error on Twilio's end
+  config.agents.forEach(function(agent) {
+    console.log('agent', agent);
+    // Send lead notification to agent
+    client.sendMessage({
+      to: agent,
+      from: config.twilioNumber,
+      body: message
+    }, function(err, data) {
+      // Return a 500 if there was an error on Twilio's end
+      if (err) {
+        console.error(err);
+        return res.status(500).send(err);
+      }
+      console.log('sent data', data);
+    });
+  });
+
+
+  // otherwise, save the user
+  var person = Person({
+    phoneNumber: req.body.phone,
+    aptNumber: req.body.aptNumber,
+    streetAddress: req.body.streetAddress,
+    emailAddress: req.body.emailAddress,
+    postalCode: req.body.postalCode
+  });
+
+  // now, save that person to the database
+  // mongoose method, see http://mongoosejs.com/docs/api.html#model_Model-save
+  person.save(function(err, data) {
+    // if err saving, respond back with error
     if (err) {
-      console.error(err);
-      return res.status(500).send(err);
+      var jsonData = {
+        status: 'ERROR',
+        message: 'Error saving person'
+      };
+      return res.json(jsonData);
     }
 
-    // otherwise, save the user
-    var person = Person({
-      phoneNumber: req.body.phone
+    console.log('saved a new person!');
+    console.log(data);
+
+    // Otherwise, respond with 200 OK
+    res.status(200).send({
+      status: 'OK',
+      person: data
     });
-
-    // now, save that person to the database
-    // mongoose method, see http://mongoosejs.com/docs/api.html#model_Model-save
-    person.save(function(err, data) {
-      // if err saving, respond back with error
-      if (err) {
-        var jsonData = {
-          status: 'ERROR',
-          message: 'Error saving person'
-        };
-        return res.json(jsonData);
-      }
-
-      console.log('saved a new person!');
-      console.log(data);
-
-      // Otherwise, respond with 200 OK
-      res.status(200).send({
-        status: 'OK',
-        person: data
-      });
-    });
-
-  })
+  });
 
 }
 

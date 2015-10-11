@@ -7,7 +7,11 @@ var personSchema = new Schema({
 	name: String,
 	locationName : String,
 	dateAdded : { type: Date, default: Date.now },
-	phoneNumber: String
+	phoneNumber: String,
+	aptNumber: String,
+	streetAddress: String,
+	emailAddress: String,
+	postalCode: String
 })
 
 // export 'Person' model so we can interact with it in other files
