@@ -6,7 +6,9 @@
 
 // dependencies
 // var geocoder = require('geocoder');
-var dotenv = require('dotenv').load();
+var env = process.env.NODE_ENV || 'dev';
+
+if(env === 'dev') var dotenv = require('dotenv').load();
 var twilio = require('twilio');
 var trim = require('lodash/string/trim');
 
