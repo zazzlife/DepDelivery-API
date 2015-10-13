@@ -8,7 +8,8 @@
 // var geocoder = require('geocoder');
 var env = process.env.NODE_ENV || 'dev';
 
-if(env === 'dev') var dotenv = require('dotenv').load();
+console.log('env', env);
+if (env === 'dev') var dotenv = require('dotenv').load();
 var twilio = require('twilio');
 var trim = require('lodash/string/trim');
 
