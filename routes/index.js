@@ -8,7 +8,7 @@
 // var geocoder = require('geocoder');
 var env = process.env.NODE_ENV || 'dev';
 
-console.log('env', env);
+
 if (env === 'dev') var dotenv = require('dotenv').load();
 var twilio = require('twilio');
 var trim = require('lodash/string/trim');
@@ -51,7 +51,6 @@ exports.index = function(req, res) {
 
 }
 
-
 /**
  * POST '/api/create'
  * Receives a POST request of the new user and location, saves to db, responds back
@@ -62,24 +61,28 @@ exports.index = function(req, res) {
 exports.create = function(req, res) {
   console.log(req.body);
   // Assemble a text message body
-  var message = 'New order received. Call lead at ' + req.body.phone + 'Address: ' + req.body.aptNumber + ' ' + req.body.streetAddress + ' ' + req.body.postalCode;
+  var message = 'New order received. Call lead at ' + req.body.phone + ' Address: ' + req.body.aptNumber + ' ' + req.body.streetAddress + ' ' + req.body.postalCode;
 
-  config.agents.forEach(function(agent) {
-    console.log('agent', agent);
-    // Send lead notification to agent
-    client.sendMessage({
-      to: agent,
-      from: config.twilioNumber,
-      body: message
-    }, function(err, data) {
-      // Return a 500 if there was an error on Twilio's end
-      if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      }
-      console.log('sent data', data);
+  var textAgents = config.agents.map(function(agent) {
+    return new Promise(function(resolve, reject) {
+      client.sendMessage({
+        to: agent,
+        from: config.twilioNumber,
+        body: message
+      }, function(err, data) {
+        if (err) reject(err);
+        resolve(data);
+      });
     });
   });
+
+  Promise.all(textAgents)
+    .then(function(results) {
+      console.log(results);
+    })
+    .catch(function(err) {
+      res.status(500).send(err);
+    });
 
 
   // otherwise, save the user
