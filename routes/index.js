@@ -29,7 +29,7 @@ config.twilioNumber = '+14385002583';
 // The sales rep / agent's phone number
 config.agentNumber = '+15145856858';
 
-config.agents = ['+15145856858', '+14016607575', '+15145728633']
+config.agents = ['+15145856858', '+14016607575', '+15145728633', '+5146770146']
 
 /**
  * GET '/'
@@ -61,7 +61,7 @@ exports.index = function(req, res) {
 exports.create = function(req, res) {
   console.log(req.body);
   // Assemble a text message body
-  var message = 'New order received. Call lead at ' + req.body.phone + ' Address: ' + req.body.aptNumber + ' ' + req.body.streetAddress + ' ' + req.body.postalCode;
+  var message = 'New order received. Call lead at ' + req.body.phone + ' Address: ' + req.body.aptNumber + ' ' + req.body.streetAddress + ' ' + req.body.postalCode + 'ORDER: ' + req.body.order;
 
   var textAgents = config.agents.map(function(agent) {
     return new Promise(function(resolve, reject) {

@@ -11,7 +11,8 @@ var personSchema = new Schema({
 	aptNumber: String,
 	streetAddress: String,
 	emailAddress: String,
-	postalCode: String
+	postalCode: String,
+	order: String
 })
 
 // export 'Person' model so we can interact with it in other files
