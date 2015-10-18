@@ -29,7 +29,7 @@ config.twilioNumber = '+14385002583';
 // The sales rep / agent's phone number
 config.agentNumber = '+15145856858';
 
-config.agents = ['+15145856858', '+14016607575', '+15145728633', '+5146770146']
+config.agents = ['+15145856858', '+14016607575', '+15145728633', '+15146770146']
 
 /**
  * GET '/'
