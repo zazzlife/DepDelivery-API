@@ -61,7 +61,7 @@ exports.index = function(req, res) {
 exports.create = function(req, res) {
   console.log(req.body);
   // Assemble a text message body
-  var message = 'New order received. Call lead at ' + req.body.phone + ' Address: ' + req.body.aptNumber + ' ' + req.body.streetAddress + ' ' + req.body.postalCode + 'ORDER: ' + req.body.order;
+  var message = 'New order received. Call lead at ' + req.body.phone + ' Address: ' + req.body.aptNumber + ' ' + req.body.streetAddress + ' ' + req.body.postalCode + ' ORDER: ' + req.body.order;
 
   var textAgents = config.agents.map(function(agent) {
     return new Promise(function(resolve, reject) {
